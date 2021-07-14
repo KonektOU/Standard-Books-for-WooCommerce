@@ -34,7 +34,7 @@ class API extends Framework\SV_WC_API_Base {
 
 		$this->set_request_header( 'Connection', 'keep-alive' );
 		$this->set_http_basic_auth( $this->api_username, $this->api_password );
-		$this->set_request_content_type_header( 'application/x-www-form-urlencoded' );
+		$this->set_request_content_type_header( 'application/x-www-form-urlencoded; charset=utf-8' );
 
 		$this->response_handler = API\Response::class;
 	}
@@ -405,11 +405,11 @@ class API extends Framework\SV_WC_API_Base {
 							continue;
 						}
 
-						$new_data[ $subprefix . '.' . $row_index . '.' . $item_key ] = $item_value;
+						$new_data[ $subprefix . '.' . $row_index . '.' . $item_key ] = urlencode( $item_value );
 					}
 				}
 			} else {
-				$new_data[ $prefix . '.' . $key ] = $item;
+				$new_data[ $prefix . '.' . $key ] = urlencode( $item );
 			}
 		}
 
