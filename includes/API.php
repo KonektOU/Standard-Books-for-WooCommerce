@@ -107,12 +107,29 @@ class API extends Framework\SV_WC_API_Base {
 
 		$order_items = [];
 		$row_number  = 0;
+		$giftcard    = null;
+
+		if ( ! empty( $coupons = $order->get_coupons() ) ) {
+			foreach ( $coupons as $coupon ) {
+				$_coupon = new \WC_Coupon( $coupon->get_code() );
+
+				if ( 'yes' === $_coupon->get_meta( 'is_coupon_giftcard', true ) ) {
+					$giftcard = $coupon;
+
+					break;
+				}
+			}
+		}
 
 		// Add order items
 		/** @var \WC_Order_Item_Product $order_item */
 		foreach ( $order->get_items( [ 'line_item', 'shipping' ] ) as $order_item ) {
 
 			$item_price = $order_item->get_total( 'edit' );
+
+			if ( $giftcard && ! $order_item->is_type( 'shipping' ) ) {
+				$item_price = $order_item->get_subtotal( 'edit' );
+			}
 
 			$order_row = [
 				'stp'      => 1,
@@ -148,6 +165,18 @@ class API extends Framework\SV_WC_API_Base {
 			$order_items[] = $order_row;
 
 			$row_number++;
+		}
+
+		if ( $giftcard ) {
+			$order_items[] = [
+				'stp'      => 1,
+				'ArtCode'  => $this->integration->get_option( 'invoice_giftcard_sku' ),
+				'Spec'     => __( 'Giftcard', 'konekt-standard-books' ),
+				'Quant'    => -1,
+				'Price'    => wc_format_decimal( $giftcard->get_discount( 'edit' ) ),
+				'Sum'      => wc_format_decimal( $giftcard->get_discount( 'edit' ) ),
+				'ItemType' => '0',
+			];
 		}
 
 		// Prepare invoice data

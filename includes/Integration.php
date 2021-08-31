@@ -33,6 +33,10 @@ class Integration extends \WC_Integration {
 
 		// Add hooks when WP is initialized
 		add_action( 'init', array( $this, 'init' ) );
+
+		// Add custom coupon data
+		add_action( 'woocommerce_coupon_options', array( $this, 'add_coupon_giftcard_option' ) );
+		add_action( 'woocommerce_coupon_options_save', array( $this, 'save_coupon_giftcard_option' ), 10, 2 );
 	}
 
 
@@ -166,6 +170,12 @@ class Integration extends \WC_Integration {
 				'title'       => __( 'Private person customer code', 'konekt-standard-books' ),
 				'type'        => 'text',
 				'default'     => '1000',
+			],
+
+			'invoice_giftcard_sku' => [
+				'title'   => __( 'Giftcard SKU', 'konekt-standard-books' ),
+				'type'    => 'text',
+				'default' => '',
 			],
 
 			'invoice_payment_deal' => [
@@ -709,6 +719,27 @@ class Integration extends \WC_Integration {
 			</p>
 		</div>
 		<?php
+	}
+
+
+	public function add_coupon_giftcard_option() {
+		woocommerce_wp_checkbox( array(
+			'id'          => 'is_coupon_giftcard',
+			'cbvalue'     => 'yes',
+			'label'       => __( 'E-giftcard', 'konekt-standard-books' ),
+			'description' => __( 'Giftcards change the way discounts are calculated on the invoice.', 'konekt-standard-books' ),
+		) );
+	}
+
+
+	public function save_coupon_giftcard_option( $post_id, $coupon ) {
+		if ( isset( $_POST['is_coupon_giftcard'] ) ) {
+			$coupon->update_meta_data( 'is_coupon_giftcard', 'yes' );
+		} else {
+			$coupon->update_meta_data( 'is_coupon_giftcard', 'no' );
+		}
+
+		$coupon->save();
 	}
 
 
