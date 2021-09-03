@@ -172,9 +172,9 @@ class API extends Framework\SV_WC_API_Base {
 				'stp'      => 1,
 				'ArtCode'  => $this->integration->get_option( 'invoice_giftcard_sku' ),
 				'Spec'     => __( 'Giftcard', 'konekt-standard-books' ),
-				'Quant'    => -1,
-				'Price'    => wc_format_decimal( $giftcard->get_discount( 'edit' ) ),
-				'Sum'      => wc_format_decimal( $giftcard->get_discount( 'edit' ) ),
+				'Quant'    => 1,
+				'Price'    => wc_format_decimal( 0 - $giftcard->get_discount( 'edit' ) - $giftcard->get_discount_tax( 'edit' ) ),
+				'Sum'      => wc_format_decimal( 0 - $giftcard->get_discount( 'edit' ) - $giftcard->get_discount_tax( 'edit' ) ),
 				'ItemType' => '0',
 			];
 		}
@@ -434,11 +434,11 @@ class API extends Framework\SV_WC_API_Base {
 							continue;
 						}
 
-						$new_data[ $subprefix . '.' . $row_index . '.' . $item_key ] = urlencode( $item_value );
+						$new_data[ $subprefix . '.' . $row_index . '.' . $item_key ] = ( $item_value );
 					}
 				}
 			} else {
-				$new_data[ $prefix . '.' . $key ] = urlencode( $item );
+				$new_data[ $prefix . '.' . $key ] = ( $item );
 			}
 		}
 
