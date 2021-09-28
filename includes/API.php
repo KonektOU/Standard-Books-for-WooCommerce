@@ -209,6 +209,8 @@ class API extends Framework\SV_WC_API_Base {
 
 		if ( $reference_number ) {
 			$invoice['CalcFinRef'] = $reference_number;
+		} else {
+			$invoice['CalcFinRef'] = $this->generate_reference_number( $order->get_id() );
 		}
 
 		if ( $update_stock ) {
@@ -443,6 +445,37 @@ class API extends Framework\SV_WC_API_Base {
 		}
 
 		return $new_data;
+	}
+
+
+	/**
+	 * Generate reference number
+	 *
+	 * @param string $stamp
+	 *
+	 * @return string
+	 */
+	public function generate_reference_number( $stamp ) {
+		$chcs = array( 7, 3, 1 );
+		$sum  = 0;
+		$pos  = 0;
+
+		for ( $i = 0; $i < strlen( $stamp ); $i++ ) {
+			$x   = (int) ( substr( $stamp, strlen( $stamp ) - 1 - $i, 1 ) );
+			$sum = $sum + ( $x * $chcs[ $pos ] );
+
+			if ( $pos == 2 ) {
+				$pos = 0;
+
+			} else {
+				$pos = $pos + 1;
+			}
+		}
+
+		$x   = 10 - ( $sum % 10 );
+		$sum = ( $x != 10 ) ? $x : 0;
+
+		return $stamp . $sum;
 	}
 
 
