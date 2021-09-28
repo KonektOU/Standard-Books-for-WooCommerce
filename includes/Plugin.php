@@ -22,7 +22,7 @@ class Plugin extends Framework\SV_WC_Plugin {
 	protected static $instance;
 
 	/** plugin version number */
-	const VERSION = '1.0.5';
+	const VERSION = '1.0.6';
 
 	/** plugin id */
 	const PLUGIN_ID = 'wc-standard-books';
