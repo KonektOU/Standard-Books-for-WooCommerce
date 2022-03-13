@@ -180,13 +180,7 @@ class Integration extends \WC_Integration {
 
 			'invoice_payment_deal' => [
 				'title'       => __( 'Payment deal in days', 'konekt-standard-books' ),
-				'type'        => 'number',
-				'default'     => '7',
-			],
-
-			'invoice_payment_deal' => [
-				'title'       => __( 'Payment deal in days', 'konekt-standard-books' ),
-				'type'        => 'number',
+				'type'        => 'text',
 				'default'     => '7',
 			],
 
