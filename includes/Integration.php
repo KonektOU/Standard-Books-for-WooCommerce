@@ -148,6 +148,14 @@ class Integration extends \WC_Integration {
 				'default'     => '',
 			],
 
+			'order_number_prefix_space' => [
+				'title'   => __( 'Add space after prefix', 'konekt-standard-books' ),
+				'type'    => 'checkbox',
+				'default' => 'no',
+				'value'   => 'yes',
+				'label'   => __( 'Space is added after prefix if selected.', 'konekt-standard-books' ),
+			],
+
 			'invoice_item_type' => [
 				'title'       => __( 'Invoice item type', 'konekt-standard-books' ),
 				'type'        => 'select',

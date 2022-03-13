@@ -181,7 +181,7 @@ class API extends Framework\SV_WC_API_Base {
 
 		// Prepare invoice data
 		$invoice = [
-			'RefStr'       => $this->integration->get_option( 'order_number_prefix', '' ) . $order->get_order_number(),
+			'RefStr'       => $this->integration->get_option( 'order_number_prefix', '' ) . ( $this->integration->get_option( 'order_number_prefix_space', 'no' ) == 'yes' ? ' ' : '' ) . $order->get_order_number(),
 			'InvDate'      => $order->get_date_created()->format( 'Y-m-d' ),
 			'Addr1'        => $order->get_billing_address_1(),
 			'Addr2'        => $order->get_billing_address_2(),
