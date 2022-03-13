@@ -213,8 +213,12 @@ class API extends Framework\SV_WC_API_Base {
 			$invoice['CalcFinRef'] = $this->generate_reference_number( $order->get_id() );
 		}
 
-		if ( $update_stock ) {
-			$invoice['UpdStockFlag'] = 1;
+		if ( 'yes' === $this->integration->get_option( 'stock_sync_allowed', 'no' ) ) {
+			if ( $update_stock ) {
+				$invoice['UpdStockFlag'] = 1;
+			} else {
+				$invoice['UpdStockFlag'] = 0;
+			}
 		} else {
 			$invoice['UpdStockFlag'] = 0;
 		}
